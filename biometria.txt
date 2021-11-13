@@ -1,0 +1,14 @@
+FingerprintTemplate probe = new FingerprintTemplate(
+                new FingerprintImage(
+                        Files.readAllBytes(Paths.get("C:\\Users\\Gasbiru\\Desktop\\biometria\\bio1_1.png")),
+                        new FingerprintImageOptions()
+                                .dpi(500)));
+        FingerprintTemplate candidate = new FingerprintTemplate(
+                new FingerprintImage(
+                        Files.readAllBytes(Paths.get("C:\\Users\\Gasbiru\\Desktop\\biometria\\biometria.jpg")),
+                        new FingerprintImageOptions()
+                                .dpi(500)));
+        double score = new FingerprintMatcher(probe)
+                .match(candidate);
+        boolean matches = score >= 40;
+        System.out.println(matches);
