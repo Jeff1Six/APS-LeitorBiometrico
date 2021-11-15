@@ -37,7 +37,7 @@ public class EmpresaLeveView extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Id", "CNPJ", "Código Agricola", "Porcentagem Poluente"
+                "Id", "CNPJ", "Endereco", "Porcentagem Poluente"
             }
         ) {
             Class[] types = new Class [] {

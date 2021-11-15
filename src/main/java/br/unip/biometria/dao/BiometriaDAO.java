@@ -18,7 +18,7 @@ import br.unip.biometria.model.EmpresaPesada;
 
 public class BiometriaDAO {
 
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/aps";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/aps_bio";
     static String user = "root";
     static String password = "";
 
@@ -55,19 +55,16 @@ public class BiometriaDAO {
         try (Connection conn = DriverManager.getConnection(DB_URL, user, password)) {
             Statement stmt = conn.createStatement();
 
-            var query = "SELECT id,\n"
-                    + "       cnpj,\n"
-                    + "       cod_agro,\n"
-                    + "       porc_pol,\n"
-                    + "       fk_empresas_cnpj\n"
-                    + "  FROM emp_leve;";
+            var query = "select * from empresas e\n" + 
+            		"inner join empresa_leve l\n" + 
+            		"on e.id_empresa = l.id_empresa;\n";
 
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 EmpresaLeve empresa = new EmpresaLeve();
-                empresa.setId(rs.getInt("id"));
+                empresa.setId(rs.getInt("id_empresa"));
                 empresa.setCnpj(rs.getString("cnpj"));
-                empresa.setCodAgro(rs.getString("cod_agro"));
+                empresa.setCodAgro(rs.getString("local_emp"));
                 empresa.setPorcPol(rs.getString("porc_pol"));
 
                 empresas.add(empresa);
@@ -85,14 +82,16 @@ public class BiometriaDAO {
         try (Connection conn = DriverManager.getConnection(DB_URL, user, password)) {
             Statement stmt = conn.createStatement();
 
-            var query = "SELECT * FROM empresa_pesada;";
+            var query = "select * from empresas e\n" + 
+            		"inner join empresa_pesada p\n" + 
+            		"on e.id_empresa = p.id_empresa;";
 
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 EmpresaPesada empresa = new EmpresaPesada();
-                empresa.setId(rs.getInt("id"));
+                empresa.setId(rs.getInt("id_empresa"));
                 empresa.setCnpj(rs.getString("cnpj"));
-                empresa.setCodAgro(rs.getString("cod_agro"));
+                empresa.setCodAgro(rs.getString("local_emp"));
                 empresa.setPorcPol(rs.getString("porc_pol"));
 
                 empresas.add(empresa);
@@ -110,18 +109,17 @@ public class BiometriaDAO {
         try (Connection conn = DriverManager.getConnection(DB_URL, user, password)) {
             Statement stmt = conn.createStatement();
 
-            var query = "SELECT cod_agro,\n"
-                    + "       id,\n"
-                    + "       cnpj,\n"
-                    + "       porc_pol\n"
-                    + "  FROM emp_margem;";
+            var query = "select id_emp_margem, porc_pol, id_pesada\n" + 
+            		"from empresa_margem\n" + 
+            		"where id_empresa in(1,2,3,4)\n" + 
+            		"and porc_pol between 1 and 50;";
 
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
                 EmpresaMargem empresa = new EmpresaMargem();
-                empresa.setId(rs.getInt("id"));
+                empresa.setId(rs.getInt("id_empresa"));
                 empresa.setCnpj(rs.getString("cnpj"));
-                empresa.setCodAgro(rs.getString("cod_agro"));
+                empresa.setCodAgro(rs.getString("local_emp"));
                 empresa.setPorcPol(rs.getString("porc_pol"));
 
                 empresas.add(empresa);
